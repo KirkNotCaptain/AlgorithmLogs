@@ -1,39 +1,42 @@
 var search = function(nums, target) {
+  let left = 0;
+  let right = nums.length - 1;
     
-  if (nums.length === 0) return -1;
-  if (nums.length === 1) {
-      nums[0] === target ? 0 : -1;
-  }
-  if (nums.length === 2) {
-      if (nums[0] === target) return 0;
-      if (nums[1] === target) return 1;
-      return -1;
-  }
-  
-  var left = 0;
-  var right = nums.length - 1
-  
-  while (right >= left) {
-      var mid = Math.floor( left + (right - left) / 2);
-      
-      if (nums[mid] === target) return mid;
-      
-      if (target < nums[mid]) {
-          if (target < nums[left]) {
-              left = mid + 1;
-          } else {
-              right = mid - 1; 
-          }
-      } else if (target > nums[mid]) {
-         if (target < nums[left]) {
-              left = mid + 1;
-          } else {
-              right = mid - 1; 
-          }
+  while (left <= right) {
+    let mid = Math.floor((left + right) / 2);
+    
+    if (nums[mid] === target) {
+      return mid;
+    }
+    
+    // When dividing the roated array into two halves, one must be sorted.
+    
+    // Check if the left side is sorted
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target <= nums[mid]) {
+        // target is in the left
+        right = mid - 1;
+        
+      } else {
+        // target is in the right
+        left = mid + 1;
       }
-  }
-  
-  return -1;    
+    } 
+    
+    // Otherwise, the right side is sorted
+    else {
+      if (nums[mid] <= target && target <= nums[right]) {
+        // target is in the right
+        left = mid + 1;
 
-  
+      } else {
+        // target is in the left
+        right = mid - 1;
+      }
+    }
+    
+    
+  }
+    
+  return -1;
 };
